@@ -1,0 +1,282 @@
+<template>
+  <el-row class="container">
+    <!--  头部  -->
+    <el-col :span="24" class="header">
+      <el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
+        <img src="../../assets/log.png" style="width:50px;height: auto" />云贝贝
+      </el-col>
+      <el-col :span="2">
+        <div class="tools" @click.prevent="collapse">
+          <i class="fa fa-align-justify"></i>
+        </div>
+      </el-col>
+      <el-col :span="4" class="userinfo">
+        <el-dropdown trigger="hover">
+          <span class="el-dropdown-link userinfo-inner"><img src="../../assets/user.png" /> {{ sysUserName }}</span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>我的消息</el-dropdown-item>
+            <el-dropdown-item>设置</el-dropdown-item>
+            <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-col>
+    </el-col>
+    <el-col :span="24" class="main">
+      <aside :class="collapsed?'menu-collapsed':'menu-expanded'" style="height:100%;">
+        <!--导航菜单-->
+        <el-menu default-active="2" class="el-menu-vertical-demo el-menu-other-style" unique-opened router><!--@open="handleOpen" @close="handleClose"-->
+          <el-submenu v-for="item in menuDatas" :index="item.id">
+            <template slot="title"><i class="el-icon-message"></i>{{ item.name }}</template>
+            <el-menu-item v-for="modular in item.roleModular" :index="modular.url"><i class="el-icon-caret-right"></i>{{ modular.name }}</el-menu-item>
+          </el-submenu>
+          <!--<el-submenu index="1">
+            <template slot="title"><i class="el-icon-message"></i>园所管理</template>
+              <el-menu-item index="/schoollist">园所信息</el-menu-item>
+              <el-menu-item index="/mailboxlist">信箱管理</el-menu-item>
+          </el-submenu>
+          <el-submenu index="2">
+            <template slot="title"><i class="el-icon-message"></i>年级管理</template>
+             <el-menu-item index="/gradeList">年级列表</el-menu-item>
+             <el-menu-item index="/classList">班级列表</el-menu-item>
+             <el-menu-item index="/babyClass">班级宝贝</el-menu-item>
+             <el-menu-item index="/TeacherClass">班级教师</el-menu-item>
+             <el-menu-item index="/campusInformationList">班级动态</el-menu-item>
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title"><i class="el-icon-message"></i>资讯管理</template>
+            <el-menu-item index="/itlist">校园资讯</el-menu-item>
+            <el-menu-item index="/bannerlist">Banner管理</el-menu-item>
+            <el-menu-item index="/noticelist">公告管理</el-menu-item>
+            <el-menu-item index="/thematicActivitiesList">活动管理</el-menu-item>
+            <el-menu-item index="/thematicActivitiesEnroll">活动报名表管理</el-menu-item>
+            <el-menu-item index="/baseparentingknowledgelist">育儿知识列表</el-menu-item>
+          </el-submenu>
+          <el-submenu index="4">
+            <template slot="title"><i class="el-icon-message"></i>教师管理</template>
+            <el-menu-item index="/teacherlist">教师列表</el-menu-item>
+            <el-menu-item index="/dutiesList">职务列表</el-menu-item>
+          </el-submenu>
+          <el-submenu index="5">
+            <template slot="title"><i class="el-icon-message"></i>学员管理</template>
+            <el-menu-item index="/studentlist">学员信息</el-menu-item>
+            <el-menu-item index="/parentsignlist">家长报名</el-menu-item>
+          </el-submenu>
+          <el-submenu index="6">
+            <template slot="title"><i class="el-icon-message"></i>考勤签到</template>
+            <el-menu-item index="/signInRecordList">签到表</el-menu-item>
+            <el-menu-item index="/LeaveRecordList">请假管理</el-menu-item>
+            <el-menu-item index="/statisticsList">考勤统计</el-menu-item>
+          </el-submenu>
+          <el-submenu index="7">
+            <template slot="title"><i class="el-icon-message"></i>营养餐谱</template>
+            <el-menu-item index="/nutritionrecipesList">餐谱管理</el-menu-item>
+            <el-menu-item index="/nutritionrecipesEveryDay">每周菜谱</el-menu-item>
+          </el-submenu>
+          <el-submenu index="8">
+            <template slot="title"><i class="el-icon-message"></i>评价管理</template>
+            <el-menu-item index="/parentCriteList">家长评价标准</el-menu-item>
+            <el-menu-item index="/teacherEvalContentList">教师评价内容</el-menu-item>
+            <el-menu-item index="/teacherEvalProjectList">教师评价项目</el-menu-item>
+            <el-menu-item index="/parentEvlList">家长评价信息</el-menu-item>
+            <el-menu-item index="/teacherEvlList">教师评价信息</el-menu-item>
+          </el-submenu>
+          <el-submenu index="9">
+            <template slot="title"><i class="el-icon-message"></i>通知管理</template>
+            <el-menu-item index="/platformlist">平台信息</el-menu-item>
+            <el-menu-item index="/">消息提醒</el-menu-item>
+          </el-submenu>
+          <el-submenu index="10">
+            <template slot="title"><i class="el-icon-message"></i>订单管理</template>
+            <el-menu-item index="/basecombo">套餐管理</el-menu-item>
+            <el-menu-item index="/orderInformationList">订单列表</el-menu-item>
+          </el-submenu>
+          <el-submenu index="11">
+            <template slot="title"><i class="el-icon-message"></i>权限管理</template>
+            <el-menu-item index="/moduleList">菜单管理</el-menu-item>
+            <el-menu-item index="/roleModuleList">角色权限</el-menu-item>
+            <el-menu-item index="/userList">管理者列表</el-menu-item>
+          </el-submenu>-->
+        </el-menu>
+      </aside>
+      <section class="content-container">
+        <div class="grid-content bg-purple-light">
+          <el-col :span="24" class="breadcrumb-container">
+            <strong class="title">首页</strong>
+            <el-breadcrumb separator="/" class="breadcrumb-inner">
+              <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+                导航1选项1
+              </el-breadcrumb-item>
+            </el-breadcrumb>
+          </el-col>
+          <el-col :span="24" class="content-wrapper">
+            <transition name="fade" mode="out-in">
+              <router-view></router-view>
+            </transition>
+          </el-col>
+        </div>
+      </section>
+    </el-col>
+  </el-row>
+</template>
+
+<script>
+  import { getStore } from '../../utils/utils'
+  export default {
+    data () {
+      return {
+        sysName: 'LOGO  云贝贝',
+        collapsed: false,
+        sysUserName: 'admin',
+        activeName: '',
+        sysUserAvatar: '../../assets/user.png',
+        form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        menuDatas: JSON.parse(getStore('userResouce'))
+      }
+    },
+    methods: {
+    }
+  }
+</script>
+
+<style scoped lang="scss"> 
+
+  .container {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+    .header {
+      height: 60px;
+      line-height: 60px;
+      background: #00d1b2;
+      color:#fff;
+      .userinfo {
+        text-align: right;
+        padding-right: 35px;
+        float: right;
+        .userinfo-inner {
+          cursor: pointer;
+          color:#fff;
+          img {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            margin: 10px 0px 10px 10px;
+            float: right;
+          }
+        }
+      }
+      .logo {
+        //width:230px;
+        height:60px;
+        font-size: 22px;
+        padding-left:20px;
+        padding-right:20px;
+        border-color: rgba(238,241,146,0.3);
+        border-right-width: 1px;
+        border-right-style: solid;
+        img {
+          width: 40px;
+          float: left;
+          margin: 10px 10px 10px 18px;
+        }
+        .txt {
+          color:#fff;
+        }
+      }
+      .logo-width{
+        width:230px;
+      }
+      .logo-collapse-width{
+        width:60px
+      }
+      .tools{
+        padding: 0px 23px;
+        width:14px;
+        height: 60px;
+        line-height: 60px;
+        cursor: pointer;
+      }
+    }
+    .main {
+      display: flex;
+      // background: #324057;
+      position: absolute;
+      top: 60px;
+      bottom: 0px;
+      overflow: hidden;
+      aside {
+        flex:0 0 230px;
+        width: 230px;
+        // position: absolute;
+        // top: 0px;
+        // bottom: 0px;
+        .el-menu-other-style{
+          overflow-y: auto;
+        }
+        .el-menu{
+          height: 100%;
+        }
+        .collapsed{
+          width:60px;
+          .item{
+            position: relative;
+          }
+          .submenu{
+            position:absolute;
+            top:0px;
+            left:60px;
+            z-index:99999;
+            height:auto;
+            display:none;
+          }
+
+        }
+      }
+      .menu-collapsed{
+        flex:0 0 60px;
+        width: 60px;
+      }
+      .menu-expanded{
+        flex:0 0 230px;
+        width: 230px;
+      }
+      .content-container {
+        // background: #f1f2f7;
+        flex:1;
+        // position: absolute;
+        // right: 0px;
+        // top: 0px;
+        // bottom: 0px;
+        // left: 230px;
+        overflow-y: auto;
+        padding: 20px;
+        .breadcrumb-container {
+          //margin-bottom: 15px;
+          .title {
+            width: 200px;
+            float: left;
+            color: #475669;
+          }
+          .breadcrumb-inner {
+            float: right;
+          }
+        }
+        .content-wrapper {
+          background-color: #fff;
+          box-sizing: border-box;
+        }
+      }
+    }
+  }
+</style>
+

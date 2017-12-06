@@ -1,0 +1,334 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+import login from '@/views/index/Login'
+import home from '@/views/index/Home'
+import testForm from '@/views/test/TestForm'
+import bannerList from '@/views/banner/List'
+import bannerEdit from '@/views/banner/Edit'
+import itList from '@/views/information/List'
+import itEdit from '@/views/information/Edit'
+import teacherList from '@/views/teacher/List'
+import teacherEdit from '@/views/teacher/Edit'
+import studentList from '@/views/student/List'
+import studentEdit from '@/views/student/Edit'
+import parentEdit from '@/views/student/ParentEdit'
+import SurrogateEdit from '@/views/student/Surrogateedit'
+import NoticeList from '@/views/notice/List'
+import NoticeEdit from '@/views/notice/Edit'
+import Push from '@/views/notice/Push'
+import MailboxList from '@/views/mailbox/List'
+import MailboxEdit from '@/views/mailbox/Edit'
+import PlatformList from '@/views/mailbox/PlatformList'
+import PlatformEdit from '@/views/mailbox/PlatformEdit'
+import ParentSignList from '@/views/mailbox/ParentSignList'
+import SchoolList from '@/views/school/List'
+import SchoolEdit from '@/views/school/Edit'
+import signInRecordList from '@/views/signInRecord/List'
+import signInRecordEdit from '@/views/signInRecord/Edit'
+import LeaveRecordList from '@/views/LeaveRecord/List'
+import statisticsList from '@/views/LeaveRecord/statisticsList'
+import nutritionrecipesList from '@/views/nutritionrecipes/List'
+import nutritionrecipesEdit from '@/views/nutritionrecipes/Edit'
+import nutritionrecipeseveryDay from '@/views/nutritionrecipes/everyDay'
+import nutritionrecipesEveryDayEdit from '@/views/nutritionrecipes/EveryDayEdit'
+import nutritionrecipesDetailed from '@/views/nutritionrecipes/Detailed'
+import thematicActivitiesList from '@/views/thematicActivities/List'
+import thematicActivitiesEdit from '@/views/thematicActivities/Edit'
+import thematicActivitiesEnroll from '@/views/thematicActivities/Enroll'
+
+import classList from '@/views/class/List'
+import classEdit from '@/views/class/Edit'
+import arrangeClass from '@/views/class/arrangeClass'
+import campusInformationList from '@/views/campusInformation/List'
+import campusInformationdetailed from '@/views/campusInformation/detailed'
+import campusInformationEdit from '@/views/campusInformation/Edit'
+import orderInformationList from '@/views/orderInformation/List'
+
+import parentEvlList from '@/views/evaluating/parent_evl_list'
+import teacherEvlList from '@/views/evaluating/teacher_evl_list'
+import teacherCritEdit from '@/views/evaluating/publish'
+import teacherEvalContentList from '@/views/baseEvaluating/teacher_eval_content_list'
+import teacherEvalProjectList from '@/views/baseEvaluating/teacher_eval_project_list'
+import parentCriteList from '@/views/baseEvaluating/parent_crite_list'
+import parentCriteEdit from '@/views/baseEvaluating/parent_crite_edit'
+import teacherEvalContentEdit from '@/views/baseEvaluating/teacher_eval_content_edit'
+import teacherEvalProjectEdit from '@/views/baseEvaluating/teacher_eval_project_edit'
+import moduleList from '@/views/role/ModuleList'
+import moduleEdit from '@/views/role/ModuleEdit'
+import gradeList from '@/views/school/grade/List'
+import gradeEdit from '@/views/school/grade/Edit'
+import roleModuleList from '@/views/role/RoleModuleList'
+import roleModuleEdit from '@/views/role/RoleModuleEdit'
+import userList from '@/views/role/UserList'
+Vue.use(Router)
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      component: login
+    },
+    {
+      path: '/index',
+      component: home,
+      children: [
+        {
+          path: '/testForm',
+          component: testForm
+        },
+        {
+          path: '/bannerlist',
+          component: bannerList
+        },
+        {
+          path: '/banneredit/tiao',
+          component: bannerEdit
+        },
+        {
+          path: '/itlist',
+          component: itList
+        },
+        {
+          path: '/itedit/tiao',
+          component: itEdit
+        },
+        {
+          path: '/teacherlist',
+          component: teacherList
+        },
+        {
+          path: '/teacheredit',
+          component: teacherEdit
+        },
+        {
+          path: '/studentlist',
+          component: studentList
+        },
+        {
+          path: '/studentEdit/tiao',
+          component: studentEdit
+        },
+        {
+          path: '/parentedit',
+          component: parentEdit
+        },
+        {
+          path: '/surrogateedit',
+          component: SurrogateEdit
+        },
+        {
+          path: '/noticelist',
+          component: NoticeList
+        },
+        {
+          path: '/noticeedit',
+          component: NoticeEdit
+        },
+        {
+          path: '/push',
+          component: Push
+        },
+        {
+          path: '/mailboxlist',
+          component: MailboxList
+        },
+        {
+          path: '/mailboxedit',
+          component: MailboxEdit
+        },
+        {
+          path: '/platformlist',
+          component: PlatformList
+        },
+        {
+          path: '/platformedit',
+          component: PlatformEdit
+        },
+        {
+          path: '/parentsignlist',
+          component: ParentSignList
+        },
+        {
+          path: '/schoollist',
+          component: SchoolList
+        },
+        {
+          path: '/schooledit',
+          component: SchoolEdit
+        },
+        {
+          path: '/signInRecordList',
+          component: signInRecordList
+        },
+        {
+          path: '/signInRecordEdit',
+          component: signInRecordEdit
+        },
+        {
+          path: '/LeaveRecordList',
+          component: LeaveRecordList
+        },
+        {
+          path: '/statisticsList',
+          component: statisticsList
+        },
+        {
+          path: '/nutritionrecipesList',
+          component: nutritionrecipesList
+        },
+        {
+          path: '/nutritionrecipesEdit',
+          component: nutritionrecipesEdit
+        },
+        {
+          path: '/nutritionrecipesEveryDay',
+          component: nutritionrecipeseveryDay
+        },
+        {
+          path: '/nutritionrecipesEveryDayEdit/tiao',
+          component: nutritionrecipesEveryDayEdit
+        },
+        {
+          path: '/nutritionrecipesDetailed',
+          component: nutritionrecipesDetailed
+        },
+        {
+          path: '/thematicActivitiesList',
+          component: thematicActivitiesList
+        },
+        {
+          path: '/thematicActivitiesEdit/tiao',
+          component: thematicActivitiesEdit
+        },
+        {
+          path: '/thematicActivitiesEnroll',
+          component: thematicActivitiesEnroll
+        },
+        {
+          path: '/classList',
+          component: classList
+        },
+        {
+          path: '/classEdit',
+          component: classEdit
+        },
+        {
+          path: '/arrangeClass',
+          component: arrangeClass
+        },
+        {
+          path: '/campusInformationList',
+          component: campusInformationList
+        },
+        {
+          path: '/campusInformationEdit',
+          component: campusInformationEdit
+        },
+        {
+          path: '/orderInformationList',
+          component: orderInformationList
+        },
+        {
+          path: '/campusInformationdetailed',
+          component: campusInformationdetailed
+        },
+        {
+          path: '/parentEvlList',
+          component: parentEvlList
+        },
+        {
+          path: '/teacherEvlList',
+          component: teacherEvlList
+        },
+        {
+          path: '/teacherCritEdit',
+          component: teacherCritEdit
+        },
+        {
+          name: 'teacherEvaluating',
+          path: '/teacherCritEdit/:id, :babyTeamId',
+          component: teacherCritEdit
+        },
+        {
+          path: '/parentCriteList',
+          component: parentCriteList
+        },
+        {
+          path: '/teacherEvalContentList',
+          component: teacherEvalContentList
+        },
+        {
+          path: '/teacherEvalProjectList',
+          component: teacherEvalProjectList
+        },
+        {
+          path: '/parentCriteEdit',
+          component: parentCriteEdit
+        },
+        {
+          name: 'parentCrite',
+          path: '/parentCriteEdit/:id',
+          component: parentCriteEdit
+        },
+        {
+          path: '/teacherEvalContentEdit',
+          component: teacherEvalContentEdit
+        },
+        {
+          name: 'teacherEvalContent',
+          path: '/teacherEvalContentEdit/:id',
+          component: teacherEvalContentEdit
+        },
+        {
+          path: '/teacherEvalProjectEdit',
+          component: teacherEvalProjectEdit
+        },
+        {
+          name: 'teacherEvalPro',
+          path: '/teacherEvalProjectEdit/:id',
+          component: teacherEvalProjectEdit
+        },
+        {
+          path: '/moduleList',
+          component: moduleList
+        },
+        {
+          name: 'module',
+          path: '/moduleEdit',
+          component: moduleEdit
+        },
+        {
+          name: 'module',
+          path: '/moduleEdit/:id',
+          component: moduleEdit
+        },
+        {
+          path: '/gradeList',
+          component: gradeList
+        },
+        {
+          path: '/gradeEdit',
+          component: gradeEdit
+        },
+        {
+          name: 'grade',
+          path: '/gradeEdit/:id',
+          component: gradeEdit
+        },
+        {
+          path: '/roleModuleList',
+          component: roleModuleList
+        },
+        {
+          name: 'roleModule',
+          path: '/roleModuleEdit',
+          component: roleModuleEdit
+        },
+        {
+          path: '/userList',
+          component: userList
+        }
+      ]
+    }
+  ]
+})

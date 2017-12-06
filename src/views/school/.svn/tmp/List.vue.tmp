@@ -1,0 +1,306 @@
+<template>
+  <el-row>
+  <el-col :span="24">
+  	<div style="font-size: 16px;margin-top: 10px;">园所列表 记录（{{total}}）</div> 
+  </el-col>
+  <el-col :span="24" class="border">  
+	 <el-form :inline="true" :model="formInline">
+	  <el-form-item label="园所名称" class="blist">
+	    <el-input v-model="schoolName" placeholder="请输入"></el-input>
+	  </el-form-item>
+	  <el-form-item label="状态" class="blist">
+	    <el-select v-model="value" placeholder="请选择状态" @change="flagChange">
+	      <el-option
+	      	v-for="item in flags"
+	      	:key="item.value"
+	      	:label="item.label"
+	      	:value="item.value">
+	      </el-option>
+	    </el-select>
+	  </el-form-item>
+	</el-form>
+  </el-col>
+  <el-col :span="24" class="border">  
+  	<span class="wrapper">
+  		<el-button type="info" @click='onSubmit' class="el-icon-search"> 查询</el-button>
+	    <el-button type="success" @click.native="openadd" class="el-icon-plus"> 新增</el-button>
+	    <el-button type="danger" class="el-icon-delete"  @click="deleteSchool()"> 删除</el-button>
+	    <el-button type="success" class="el-icon-circle-close"  @click="stopSchool()"> 停用</el-button>
+	    <el-button type="warning" class="el-icon-upload2 "> 导出选中</el-button>
+	    <el-button type="warning" class="el-icon-upload2 "> 导出全部</el-button>
+    </span>
+  </el-col>
+ <el-col :span="24" style="margin-top: 10px;">  
+	  	<el-table
+	  	 ref="multipleTable"
+	    :data="tableData"
+	    border
+	    style="width: 100%"
+	    :default-sort = "{prop: 'array'}"
+	    @selection-change="handleSelectionChange"
+	    @select="selectRow"
+	    >
+	    <el-table-column
+       	 type="selection"
+	      width="55">
+	    </el-table-column>
+	    <el-table-column
+	      prop="id"
+	      label="校园ID"
+	      sortable
+	      width="180">
+	    </el-table-column>
+	    <el-table-column
+	      prop="logo"
+	      label="校园logo"
+	      sortable
+	      width="180">
+	    </el-table-column>
+	     <el-table-column
+	      prop="name"
+	      label="校园名称"
+	      sortable
+	      width="180">
+	    </el-table-column>
+	    <el-table-column
+	      prop="intro"
+	      label="校园简介"
+	      sortable
+	      width="180">
+	    </el-table-column>
+	    <el-table-column
+	      prop="address"
+	      label="地址"
+	      sortable
+	      width="180">
+	    </el-table-column>
+	    <el-table-column
+	      prop="telephone"
+	      label="联系电话"
+	      sortable
+	      width="180">
+	    </el-table-column>
+	    <el-table-column
+	      prop="email"
+	      label="邮箱"
+	      sortable
+	      width="180">
+	    </el-table-column>
+	    <el-table-column
+	      prop="website"
+	      label="网址"
+	      sortable
+	      width="180">
+	    </el-table-column>
+	    <el-table-column
+	      prop="createTime"
+	      label="创建时间"
+	      sortable
+	      :formatter="formatterDate"
+	      width="180">
+	    </el-table-column>
+	    <el-table-column
+	      prop="state"
+	      label="状态"
+	      sortable
+	      width="130">
+	    </el-table-column>
+	    <el-table-column
+	      prop="deleteFlag"
+	      label="删除标记"
+	      sortable
+	      width="130">
+	    </el-table-column>
+	     <el-table-column
+	      prop="amCheckInDeadline"
+	      label="am签到"
+	      sortable
+	      width="130">
+	    </el-table-column>
+		<el-table-column
+		      fixed="right"
+		      label="操作"
+		      width="150">
+		      <template scope="scope">
+		      	<el-button
+		          @click.native.prevent="deleteRow(scope.$index, tableData4)"
+		          type="text"
+		          size="small">
+		          分享
+		        </el-button>
+		        <el-button
+		          @click.native="editSchool(scope.row.id)"
+		          type="text"
+		          size="small">
+		          编辑
+		        </el-button>
+		      </template>
+		  </el-table-column>
+	    
+	  </el-table>
+  </el-col>
+  <el-col>
+  	<div class="block" style="float: right;margin-right: 10px;margin-top: 10px;">
+	    <el-pagination
+	      @size-change="handleSizeChange"
+	      @current-change="handleCurrentChange"
+	      :current-page="page"
+	      :page-sizes="pageSizes"
+	      :page-size="size"
+	      layout="total, sizes, prev, pager, next, jumper"
+	      :total="total">
+	    </el-pagination>
+	  </div>
+  </el-col>
+  </el-row>
+</template>
+
+<script>
+  import http from '../../utils/http'
+  export default {
+    data () {
+      return {
+        schoolName: '', // 园校名称
+        // 删除标记
+        flags: [{
+          value: 3,
+          label: '全部'
+        }, {
+          value: 0,
+          label: '正常'
+        }, {
+          value: 1,
+          label: '删除'
+        }],
+        value: '', // 删除标记值
+        multipleSelection: [],
+        tableData: [], // dgv数据
+        total: 0, // 总记录数
+        page: 1, // 当前页码
+        size: 10, // 每页大小
+        pageSizes: [10, 1, 20, 30], // 每页大小下拉框
+        deleteResult: false,  // 删除结果
+        strIds: [], // 园校id集合
+        ids: [], // 园校id集合
+        requestURL: '' // 请求地址
+      }
+    },
+    methods: {
+      onSubmit () {
+        this.getData()
+      },
+      handleSelectionChange (val) {
+        this.multipleSelection = val
+      },
+      deleteRow (index, rows) {
+        rows.splice(index, 1)
+      },
+      openadd () {
+        this.$router.push({ path: '/schooledit' })
+      },
+      handleSizeChange (val) {
+        this.size = val
+        this.getData()
+      },
+      handleCurrentChange (val) {
+        this.page = val
+        this.getData()
+      },
+      flagChange () {
+        // this.getData()
+      },
+      // 异步加载园校数据
+      async getData () {
+        let params = {
+          startPage: this.page,
+          pageSise: this.size,
+          deleteFlags: this.value,
+          schoolName: this.schoolName
+        }
+        let data = await http.post('/school/findSchoolByDynamic.do', params)
+        this.tableData = data.data.obj.school
+        this.total = data.data.obj.total
+      },
+      // 逻辑删除园校
+      deleteSchool () {
+        if (this.ids.length > 0) {
+          this.requestURL = '/school/delSchool.do'
+          this.delOrStopSchool(this.ids)
+          // alert(this.ids)
+        } else {
+          this.open1('请选择要删除的园校')
+        }
+      },
+      // 获取选中的行的主键id集合
+      selectRow (row) {
+        this.strIds = []
+        row.forEach(row => {
+          this.strIds.push(row.id)
+          this.ids = this.strIds.join(',')
+        })
+      },
+      // 逻辑删除园校、停用园校
+      async delOrStopSchool (ids) {
+        let params = {
+          schoolIds: ids
+        }
+        let data = await http.post(this.requestURL, params)
+        this.deleteResult = data.data.success
+        if (this.deleteResult) {
+          this.open2()
+          this.getData()
+        } else {
+          this.open3()
+        }
+      },
+      // 停用园校
+      stopSchool () {
+        if (this.ids.length > 0) {
+          this.requestURL = '/school/stopSchool.do'
+          this.delOrStopSchool(this.ids)
+          // alert(this.ids)
+        } else {
+          this.open1('请选择要停用的园校')
+        }
+      },
+      // 编辑园校
+      editSchool (schoolId) {
+        this.$router.push({path: '/schooledit', query: { id: schoolId }})
+        // this.$router.push({path: '/schooledit?id=' + schoolId})
+      },
+      open1 (msg) {
+        this.$message(msg)
+      },
+      open2 () {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+      },
+      open3 () {
+        this.$message({
+          message: '操作失败',
+          type: 'warning'
+        })
+      },
+      formatterDate (row, column) {
+        return row.createTime.toString().split(' ')[1]
+      }
+    },
+    mounted () {
+      this.getData()
+    }
+  }
+</script>
+
+<style>
+	.border{
+		border: 1px solid #18c79c;
+		border-radius: 5px;
+		margin-top: 15px;
+		padding: 15px 20px;
+	}
+	.blist{
+		margin:0;
+	}
+</style>
